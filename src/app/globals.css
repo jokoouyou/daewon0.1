@@ -1,0 +1,70 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Barlow:wght@400;500;600;700;800;900&family=Montserrat:wght@400;500;600;700;800;900&display=swap');
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply bg-slate-50 text-slate-900 font-sans antialiased;
+  }
+
+  ::selection {
+    @apply bg-safety-red/20 text-navy;
+  }
+}
+
+@layer components {
+  .btn-primary {
+    @apply inline-flex items-center justify-center gap-2 px-6 py-3 md:px-8 md:py-4 
+           bg-safety-red text-white font-bold text-sm md:text-base uppercase tracking-wider
+           rounded-lg shadow-lg shadow-safety-red/25
+           hover:bg-safety-red-dark hover:shadow-xl hover:shadow-safety-red/30
+           active:scale-[0.98] transition-all duration-200;
+  }
+
+  .btn-secondary {
+    @apply inline-flex items-center justify-center gap-2 px-6 py-3 md:px-8 md:py-4 
+           border-2 border-white text-white font-bold text-sm md:text-base uppercase tracking-wider
+           rounded-lg hover:bg-white hover:text-navy
+           active:scale-[0.98] transition-all duration-200;
+  }
+
+  .btn-outline {
+    @apply inline-flex items-center justify-center gap-2 px-6 py-3 md:px-8 md:py-4 
+           border-2 border-safety-red text-safety-red font-bold text-sm md:text-base uppercase tracking-wider
+           rounded-lg hover:bg-safety-red hover:text-white
+           active:scale-[0.98] transition-all duration-200;
+  }
+
+  .section-title {
+    @apply text-3xl md:text-4xl font-bold text-navy uppercase tracking-tight;
+  }
+
+  .section-subtitle {
+    @apply text-slate-500 text-base md:text-lg max-w-2xl mx-auto leading-relaxed;
+  }
+
+  .card-hover {
+    @apply bg-white rounded-xl shadow-md border border-slate-200 overflow-hidden
+           hover:-translate-y-2 hover:shadow-xl transition-all duration-300;
+  }
+
+  .stat-number {
+    @apply text-5xl md:text-6xl font-black text-safety-red;
+  }
+
+  .stat-label {
+    @apply text-xs md:text-sm text-slate-400 uppercase tracking-wider font-bold mt-2;
+  }
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+}
