@@ -1,6 +1,7 @@
-const SPREADSHEET_ID = "YOUR_SPREADSHEET_ID";
+const SPREADSHEET_ID = "16KDnPYhTRJxTwrztyexnNKrWsyVENW5xWeqnQBkSFJM";
 const SHEET_NAME = "문의";
-const NOTIFICATION_EMAIL = "dwfe119@hanmail.net";
+# const NOTIFICATION_EMAIL = "dwfe119@hanmail.net";
+const NOTIFICATION_EMAIL = "mailtoreve@gmail.net";
 const TIME_ZONE = "Asia/Seoul";
 
 /**
