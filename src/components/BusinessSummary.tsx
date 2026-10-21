@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { Zap, ShieldCheck, Thermometer, ArrowRight } from "lucide-react";
 
 const services = [
@@ -12,6 +13,7 @@ const services = [
     description:
       "자동화재탐지설비, 비상경보 및 R형 시스템 시공. 화재 초기 감지부터 경보, 제어까지 통합 전기 소방 시스템을 구축합니다.",
     href: "/services#electrical",
+    image: "/assets/images/dw22.jpg",
     color: "text-safety-red",
     bgColor: "bg-safety-red/5",
   },
@@ -22,6 +24,7 @@ const services = [
     description:
       "기자재 도소매, 소화기 약제 재충전, CO2 및 가스계 소화설비 충전 및 유지 보수, 폐소화기 무상수거 서비스.",
     href: "/services#materials",
+    image: "/assets/images/dw12.jpg",
     color: "text-amber-accent",
     bgColor: "bg-amber-accent/5",
   },
@@ -32,6 +35,7 @@ const services = [
     description:
       "옥내외 소화전, 스프링클러, 연결살수설비, 소방 배관 공사 전문. 물리적 화재 진압을 위한 배관 및 기계 설비 시공.",
     href: "/services#mechanical",
+    image: "/assets/images/dw32.jpg",
     color: "text-blue-500",
     bgColor: "bg-blue-500/5",
   },
@@ -89,6 +93,16 @@ export default function BusinessSummary() {
               >
                 {/* Top accent bar */}
                 <div className="h-1.5 bg-safety-red w-0 group-hover:w-full transition-all duration-500" />
+
+                <div className="relative aspect-[16/9]">
+                  <Image
+                    src={service.image}
+                    alt={`${service.title} 서비스 사진`}
+                    fill
+                    sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                    className="object-cover"
+                  />
+                </div>
 
                 <div className="p-6 md:p-8">
                   {/* Icon */}

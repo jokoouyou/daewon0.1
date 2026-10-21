@@ -8,7 +8,7 @@ const projects = [
   {
     title: "한국전기연구원",
     description: "나노소재 화학습식공정 플랫폼 구축 소방공사",
-    image: "/assets/images/164s.jpg",
+    image: "/assets/images/KERI01.jpg",
     tag: "연구시설 / 신축공사",
   },
   {
@@ -26,7 +26,7 @@ const projects = [
   {
     title: "남해해성고등학교",
     description: "기숙사 간이스프링클러 설치 소방 공사",
-    image: "/assets/images/남해해성고등학교-기숙사여.jpg",
+    image: "/assets/images/haesunghighschool01.jpg",
     tag: "교육시설 / 소방설비",
   },
 ];

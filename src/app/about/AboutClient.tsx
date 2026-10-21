@@ -5,12 +5,12 @@ import Image from "next/image";
 import { X, Shield, Award } from "lucide-react";
 
 const certifications = [
-  { src: "/assets/docs/Doc-사업자등록증.jpg", alt: "사업자등록증" },
-  { src: "/assets/docs/Doc-소방시설업등록증.jpg", alt: "소방시설업등록증" },
-  { src: "/assets/docs/Doc-소방시설업등록수첩.jpg", alt: "소방시설업등록수첩" },
-  { src: "/assets/docs/Doc-소방기술자보유증명서.jpg", alt: "소방기술자보유증명서" },
-  { src: "/assets/docs/Doc-소방기술자보유명단.jpg", alt: "소방기술자보유명단" },
-  { src: "/assets/docs/Doc-경영상태등의확인서.jpg", alt: "경영상태등의확인서" },
+  { src: "/assets/docs/Doc-registrationcertificate.jpg", alt: "사업자등록증" },
+  { src: "/assets/docs/Doc-fireprotection.jpg", alt: "소방시설업등록증" },
+  { src: "/assets/docs/Doc-handbookfireprotection.jpg", alt: "소방시설업등록수첩" },
+  { src: "/assets/docs/Doc-firesafetytechnician.jpg", alt: "소방기술자보유증명서" },
+  { src: "/assets/docs/Doc-listfireprotectiontechnicians.jpg", alt: "소방기술자보유명단" },
+  { src: "/assets/docs/Doc-financialcondition.jpg", alt: "경영상태등의확인서" },
 ];
 
 export default function AboutClient() {

@@ -4,10 +4,10 @@ import { useEffect, useRef, useState } from "react";
 import { Shield, Building2, Wrench, Award } from "lucide-react";
 
 const stats = [
-  { icon: Award, value: 20, suffix: "+", label: "Years of Service" },
+  { icon: Award, value: new Date().getFullYear() - 1999, suffix: "+", label: "Years of Service" },
   { icon: Shield, value: 100, suffix: "%", label: "Safety Record" },
   { icon: Building2, value: 500, suffix: "+", label: "Projects Completed" },
-  { icon: Wrench, value: 15, suffix: "+", label: "Expert Engineers" },
+  { icon: Wrench, value: 10, suffix: "+", label: "Expert Engineers" },
 ];
 
 function Counter({ end, suffix }: { end: number; suffix: string }) {

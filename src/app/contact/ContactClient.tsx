@@ -5,18 +5,43 @@ import { Phone, Mail, MapPin, MessageCircle, Send, Check } from "lucide-react";
 
 export default function ContactClient() {
   const [formData, setFormData] = useState({
+    company: "",
     name: "",
-    phone: "",
+    phoneParts: ["", "", ""],
     email: "",
     type: "",
     content: "",
     agree: false,
   });
   const [submitted, setSubmitted] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState("");
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setSubmitted(true);
+    setSubmitting(true);
+    setSubmitError("");
+
+    const payload = new URLSearchParams({
+      company: formData.company,
+      name: formData.name,
+      phone: formData.phoneParts.join("-"),
+      email: formData.email,
+      type: formData.type,
+      content: formData.content,
+    });
+
+    try {
+      await fetch(
+        "https://script.google.com/macros/s/AKfycbwYVD3Y148oIQTZozyIgvC-oqy0T-EYvRN4sJNWETE_Io1F-2cKBxxi5rcMWg5xv4Y/exec",
+        { method: "POST", body: payload, mode: "no-cors" }
+      );
+      setSubmitted(true);
+    } catch {
+      setSubmitError("전송에 실패했습니다. 잠시 후 다시 시도해 주세요.");
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   return (
@@ -120,7 +145,7 @@ export default function ContactClient() {
               </div>
 
               <a
-                href="https://pf.kakao.com"
+                href="https://pf.kakao.com/daewonfire/friend"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center gap-2 bg-amber-accent text-navy font-bold px-6 py-3 md:px-8 md:py-4 rounded-lg hover:bg-amber-accent/90 transition-all text-sm md:text-base"
@@ -148,8 +173,20 @@ export default function ContactClient() {
                 <form onSubmit={handleSubmit} className="space-y-6">
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div>
+                      <label htmlFor="company" className="block text-sm font-medium text-navy mb-2">
+                        회사명
+                      </label>
+                      <input
+                        type="text"
+                        id="company"
+                        value={formData.company}
+                        onChange={(e) => setFormData({ ...formData, company: e.target.value })}
+                        className="w-full px-4 py-3 rounded-lg border border-slate-200 focus:ring-2 ring-safety-red/20 focus:outline-none transition-all"
+                      />
+                    </div>
+                    <div>
                       <label htmlFor="name" className="block text-sm font-medium text-navy mb-2">
-                        성함/회사명 <span className="text-safety-red">*</span>
+                        성함 <span className="text-safety-red">*</span>
                       </label>
                       <input
                         type="text"
@@ -160,18 +197,34 @@ export default function ContactClient() {
                         required
                       />
                     </div>
-                    <div>
-                      <label htmlFor="phone" className="block text-sm font-medium text-navy mb-2">
-                        연락처 <span className="text-safety-red">*</span>
-                      </label>
-                      <input
-                        type="text"
-                        id="phone"
-                        value={formData.phone}
-                        onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                        className="w-full px-4 py-3 rounded-lg border border-slate-200 focus:ring-2 ring-safety-red/20 focus:outline-none transition-all"
-                        required
-                      />
+                  </div>
+                  <div>
+                    <label htmlFor="phone-first" className="block text-sm font-medium text-navy mb-2">
+                      연락처 <span className="text-safety-red">*</span>
+                    </label>
+                    <div className="flex items-center gap-2">
+                      {formData.phoneParts.map((part, index) => (
+                        <span key={index} className="contents">
+                          {index > 0 && <span aria-hidden="true">-</span>}
+                          <input
+                            type="tel"
+                            id={index === 0 ? "phone-first" : `phone-${index + 1}`}
+                            inputMode="numeric"
+                            autoComplete={index === 0 ? "tel-area-code" : "off"}
+                            aria-label={`연락처 ${index + 1}번째 입력`}
+                            value={part}
+                            onChange={(e) => {
+                              const nextParts = [...formData.phoneParts];
+                              nextParts[index] = e.target.value.replace(/\D/g, "").slice(0, index === 0 ? 3 : 4);
+                              setFormData({ ...formData, phoneParts: nextParts });
+                            }}
+                            className="min-w-0 w-1/3 px-4 py-3 rounded-lg border border-slate-200 focus:ring-2 ring-safety-red/20 focus:outline-none transition-all"
+                            required
+                            pattern={index === 0 ? "[0-9]{2,3}" : "[0-9]{4}"}
+                            maxLength={index === 0 ? 3 : 4}
+                          />
+                        </span>
+                      ))}
                     </div>
                   </div>
                   <div>
@@ -222,14 +275,16 @@ export default function ContactClient() {
                       checked={formData.agree}
                       onChange={(e) => setFormData({ ...formData, agree: e.target.checked })}
                       className="mt-1 rounded border-slate-300 text-safety-red focus:ring-safety-red/20"
+                      required
                     />
                     <label htmlFor="agree" className="text-sm text-navy font-medium">
                       개인정보처리방침 동의 <span className="text-safety-red">*</span>
                     </label>
                   </div>
-                  <button type="submit" className="btn-primary w-full">
+                  {submitError && <p role="alert" className="text-sm text-safety-red">{submitError}</p>}
+                  <button type="submit" className="btn-primary w-full" disabled={submitting || !formData.agree}>
                     <Send className="h-5 w-5" />
-                    문의 보내기
+                    {submitting ? "전송 중..." : "문의 보내기"}
                   </button>
                 </form>
               )}

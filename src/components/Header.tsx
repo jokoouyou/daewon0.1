@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { Menu, X, Phone } from "lucide-react";
 import Link from "next/link";
+import Image from "next/image";
 import { usePathname } from "next/navigation";
 
 const navLinks = [
@@ -41,8 +42,14 @@ export default function Header() {
         <div className="flex items-center justify-between h-16 md:h-20">
           {/* Logo */}
           <Link href="/" className="flex items-center gap-3 group">
-            <div className="w-10 h-10 md:w-12 md:h-12 bg-safety-red rounded-lg flex items-center justify-center font-black text-white text-lg md:text-xl group-hover:bg-safety-red-dark transition-colors">
-              DW
+            <div className="relative w-10 h-10 md:w-12 md:h-12 overflow-hidden rounded-lg">
+              <Image
+                src="/assets/images/111.jpg"
+                alt="대원소방 로고"
+                fill
+                sizes="48px"
+                className="object-cover"
+              />
             </div>
             <div className="flex flex-col">
               <span className="text-white font-bold text-sm md:text-base leading-tight">

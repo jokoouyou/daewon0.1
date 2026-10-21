@@ -5,11 +5,11 @@ import Link from "next/link";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 
 const heroImages = [
+  "/assets/images/dw-title12.jpg",
   "/assets/images/Daewon-title.jpg",
-  "/assets/images/dw22.jpg",
-  "/assets/images/dw21.jpg",
-  "/assets/images/dw77.jpg",
   "/assets/images/dw53.jpg",
+  "/assets/images/dw77.jpg",
+  "/assets/images/dw55.jpg",
 ];
 
 export default function HeroSection() {
