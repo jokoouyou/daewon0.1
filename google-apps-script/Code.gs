@@ -42,7 +42,12 @@ function doPost(e) {
         "content",
       ]]);
     }
-    const row = Math.max(sheet.getLastRow() + 1, 3);
+    const lastRow = sheet.getLastRow();
+    const timestamps = lastRow >= 3
+      ? sheet.getRange(3, 1, lastRow - 2, 1).getValues()
+      : [];
+    const emptyIndex = timestamps.findIndex(([value]) => value === "" || value === null);
+    const row = emptyIndex === -1 ? Math.max(lastRow + 1, 3) : emptyIndex + 3;
     sheet.getRange(row, 1, 1, 7).setValues([[
       timestamp,
       company,
