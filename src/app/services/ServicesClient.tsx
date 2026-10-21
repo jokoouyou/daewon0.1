@@ -95,13 +95,13 @@ const tabs = [
         },
         {
           title: "스프링클러 및 연결살수설비",
-          image: "/assets/images/20211.jpg",
+          image: "/assets/images/85.jpg",
           description:
             "열 감지 자동 분사 헤드 설치, 알람밸브 세팅, 지하층 송수관 연결살수설비 시공.",
         },
         {
           title: "소방 배관 공사",
-          image: "/assets/images/85.jpg",
+          image: "/assets/images/dw16.jpg",
           description:
             "소방 펌프실에서 건물 전체로 연결되는 강관 및 CPVC 용접, 나사 가공, 그루브 조인트 전문 기초 시공.",
         },
