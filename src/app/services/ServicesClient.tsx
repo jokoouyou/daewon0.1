@@ -57,7 +57,7 @@ const tabs = [
         },
         {
           title: "소화기(분말, CO2 외) 충약",
-          image: "/assets/images/dw12.jpg",
+          image: "/assets/images/dw14.jpg",
           description:
             "변질되거나 사용한 소화 약제를 수거하여 규정에 맞게 재충전하고 압력 가스를 채워 정밀 검사를 거쳐 복구합니다.",
         },

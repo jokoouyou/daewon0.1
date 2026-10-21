@@ -8,7 +8,7 @@ const projects = [
   {
     title: "한국전기연구원",
     description: "나노소재 화학습식공정 플랫폼 구축 소방공사",
-    image: "/assets/images/KERI01.jpg",
+    image: "/assets/images/KERI01.jpeg",
     tag: "연구시설 / 신축공사",
   },
   {
