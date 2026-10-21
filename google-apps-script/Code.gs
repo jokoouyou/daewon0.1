@@ -29,6 +29,7 @@ function doPost(e) {
     const content = String(payload.content || "");
 
     const spreadsheet = SpreadsheetApp.openById(SPREADSHEET_ID);
+    spreadsheet.setSpreadsheetTimeZone(TIME_ZONE);
     const sheet = spreadsheet.getSheetByName(SHEET_NAME) || spreadsheet.insertSheet(SHEET_NAME);
     if (sheet.getLastRow() < 2) {
       sheet.getRange(2, 1, 1, 7).setValues([[
@@ -41,6 +42,7 @@ function doPost(e) {
         "content",
       ]]);
     }
+    sheet.getRange(2, 8, 1, 2).setValues([["email_status", "email_error"]]);
     const lastRow = sheet.getLastRow();
     const timestamps = lastRow >= 3
       ? sheet.getRange(3, 1, lastRow - 2, 1).getValues()
@@ -58,22 +60,31 @@ function doPost(e) {
     ]]);
     sheet.getRange(row, 1).setNumberFormat("yyyy/MM/dd HH:mm");
 
-    MailApp.sendEmail({
-      to: NOTIFICATION_EMAIL,
-      subject: `[대원소방 문의] ${name || "이름 미입력"}`,
-      body: [
-        `일시 : ${timestampText}`,
-        `회사 : ${company}`,
-        `성명 : ${name}`,
-        `연락처 : ${phone}`,
-        `이메일 : ${email}`,
-        `문의 유형 : ${type}`,
-        `문의 내용 : ${content}`,
-      ].join("\n\n"),
-    });
+    let emailStatus = "sent";
+    let emailError = "";
+    try {
+      MailApp.sendEmail({
+        to: NOTIFICATION_EMAIL,
+        subject: `[대원소방 문의] ${name || "이름 미입력"}`,
+        body: [
+          `일시 : ${timestampText}`,
+          `회사 : ${company}`,
+          `성명 : ${name}`,
+          `연락처 : ${phone}`,
+          `이메일 : ${email}`,
+          `문의 유형 : ${type}`,
+          `문의 내용 : ${content}`,
+        ].join("\n\n"),
+      });
+    } catch (error) {
+      emailStatus = "failed";
+      emailError = error && error.message ? error.message : String(error);
+      console.error(`MailApp.sendEmail failed: ${emailError}`);
+    }
+    sheet.getRange(row, 8, 1, 2).setValues([[emailStatus, emailError]]);
 
     return ContentService
-      .createTextOutput(JSON.stringify({ ok: true }))
+      .createTextOutput(JSON.stringify({ ok: true, emailSent: emailStatus === "sent" }))
       .setMimeType(ContentService.MimeType.JSON);
   } finally {
     lock.releaseLock();
@@ -84,4 +95,10 @@ function formatPhone(digits) {
   if (digits.length <= 4) return digits;
   if (digits.length <= 8) return `${digits.slice(0, -4)}-${digits.slice(-4)}`;
   return `${digits.slice(0, -8)}-${digits.slice(-8, -4)}-${digits.slice(-4)}`;
+}
+
+// Run once from the Apps Script editor to authorize MailApp and inspect quota.
+function authorizeMailApp() {
+  const remainingQuota = MailApp.getRemainingDailyQuota();
+  console.log(`Remaining email quota: ${remainingQuota}`);
 }

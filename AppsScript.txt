@@ -27,11 +27,13 @@ function doPost(e) {
 
   try {
     const spreadsheet = SpreadsheetApp.openById(SPREADSHEET_ID);
+    spreadsheet.setSpreadsheetTimeZone(TIME_ZONE);
     const sheet = spreadsheet.getSheetByName(SHEET_NAME) || spreadsheet.insertSheet(SHEET_NAME);
 
     if (sheet.getRange(2, 1).isBlank()) {
       sheet.getRange(2, 1, 1, HEADERS.length).setValues([HEADERS]);
     }
+    sheet.getRange(2, 8, 1, 2).setValues([["email_status", "email_error"]]);
 
     const lastRow = sheet.getLastRow();
     const timestamps = lastRow >= 3
@@ -42,24 +44,39 @@ function doPost(e) {
     sheet.getRange(row, 1, 1, values.length).setValues([values]);
     sheet.getRange(row, 1).setNumberFormat("yyyy/MM/dd HH:mm");
 
-    MailApp.sendEmail({
-      to: NOTIFICATION_EMAIL,
-      subject: `[대원소방 문의] ${values[2] || "이름 미입력"}`,
-      body: [
-        `일시 : ${timestampText}`,
-        `회사 : ${values[1]}`,
-        `성명 : ${values[2]}`,
-        `연락처 : ${values[3]}`,
-        `이메일 : ${values[4]}`,
-        `문의 유형 : ${values[5]}`,
-        `문의 내용 : ${values[6]}`,
-      ].join("\n\n"),
-    });
+    let emailStatus = "sent";
+    let emailError = "";
+    try {
+      MailApp.sendEmail({
+        to: NOTIFICATION_EMAIL,
+        subject: `[대원소방 문의] ${values[2] || "이름 미입력"}`,
+        body: [
+          `일시 : ${timestampText}`,
+          `회사 : ${values[1]}`,
+          `성명 : ${values[2]}`,
+          `연락처 : ${values[3]}`,
+          `이메일 : ${values[4]}`,
+          `문의 유형 : ${values[5]}`,
+          `문의 내용 : ${values[6]}`,
+        ].join("\n\n"),
+      });
+    } catch (error) {
+      emailStatus = "failed";
+      emailError = error && error.message ? error.message : String(error);
+      console.error(`MailApp.sendEmail failed: ${emailError}`);
+    }
+    sheet.getRange(row, 8, 1, 2).setValues([[emailStatus, emailError]]);
 
     return ContentService
-      .createTextOutput(JSON.stringify({ ok: true, timestamp: timestampText }))
+      .createTextOutput(JSON.stringify({ ok: true, emailSent: emailStatus === "sent", timestamp: timestampText }))
       .setMimeType(ContentService.MimeType.JSON);
   } finally {
     lock.releaseLock();
   }
+}
+
+// Run once from the Apps Script editor to authorize MailApp and inspect quota.
+function authorizeMailApp() {
+  const remainingQuota = MailApp.getRemainingDailyQuota();
+  console.log(`Remaining email quota: ${remainingQuota}`);
 }
