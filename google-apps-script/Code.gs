@@ -1,7 +1,6 @@
 const SPREADSHEET_ID = "16KDnPYhTRJxTwrztyexnNKrWsyVENW5xWeqnQBkSFJM";
 const SHEET_NAME = "문의";
-# const NOTIFICATION_EMAIL = "dwfe119@hanmail.net";
-const NOTIFICATION_EMAIL = "mailtoreve@gmail.net";
+const NOTIFICATION_EMAIL = "mailtoreve@gmail.com";
 const TIME_ZONE = "Asia/Seoul";
 
 /**
@@ -61,7 +60,7 @@ function doPost(e) {
 
     MailApp.sendEmail({
       to: NOTIFICATION_EMAIL,
-      subject: `[대원소방 문의] ${name}`,
+      subject: `[대원소방 문의] ${name || "이름 미입력"}`,
       body: [
         `일시 : ${timestampText}`,
         `회사 : ${company}`,
