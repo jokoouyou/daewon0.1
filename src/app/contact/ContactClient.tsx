@@ -7,7 +7,7 @@ export default function ContactClient() {
   const [formData, setFormData] = useState({
     company: "",
     name: "",
-    phoneParts: ["", "", ""],
+    phone: "",
     email: "",
     type: "",
     content: "",
@@ -25,7 +25,7 @@ export default function ContactClient() {
     const payload = new URLSearchParams({
       company: formData.company,
       name: formData.name,
-      phone: formData.phoneParts.join("-"),
+      phone: formData.phone,
       email: formData.email,
       type: formData.type,
       content: formData.content,
@@ -199,33 +199,18 @@ export default function ContactClient() {
                     </div>
                   </div>
                   <div>
-                    <label htmlFor="phone-first" className="block text-sm font-medium text-navy mb-2">
+                    <label htmlFor="phone" className="block text-sm font-medium text-navy mb-2">
                       연락처 <span className="text-safety-red">*</span>
                     </label>
-                    <div className="flex items-center gap-2">
-                      {formData.phoneParts.map((part, index) => (
-                        <span key={index} className="contents">
-                          {index > 0 && <span aria-hidden="true">-</span>}
-                          <input
-                            type="tel"
-                            id={index === 0 ? "phone-first" : `phone-${index + 1}`}
-                            inputMode="numeric"
-                            autoComplete={index === 0 ? "tel-area-code" : "off"}
-                            aria-label={`연락처 ${index + 1}번째 입력`}
-                            value={part}
-                            onChange={(e) => {
-                              const nextParts = [...formData.phoneParts];
-                              nextParts[index] = e.target.value.replace(/\D/g, "").slice(0, index === 0 ? 3 : 4);
-                              setFormData({ ...formData, phoneParts: nextParts });
-                            }}
-                            className="min-w-0 w-1/3 px-4 py-3 rounded-lg border border-slate-200 focus:ring-2 ring-safety-red/20 focus:outline-none transition-all"
-                            required
-                            pattern={index === 0 ? "[0-9]{2,3}" : "[0-9]{4}"}
-                            maxLength={index === 0 ? 3 : 4}
-                          />
-                        </span>
-                      ))}
-                    </div>
+                    <input
+                      type="tel"
+                      id="phone"
+                      value={formData.phone}
+                      onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+                      className="w-full px-4 py-3 rounded-lg border border-slate-200 focus:ring-2 ring-safety-red/20 focus:outline-none transition-all"
+                      required
+                      autoComplete="tel"
+                    />
                   </div>
                   <div>
                     <label htmlFor="email" className="block text-sm font-medium text-navy mb-2">

@@ -1,0 +1,45 @@
+const SPREADSHEET_ID = "YOUR_SPREADSHEET_ID";
+const SHEET_NAME = "문의";
+const TIME_ZONE = "Asia/Seoul";
+const HEADERS = ["timestamp", "company", "name", "phone", "email", "type", "content"];
+
+function doPost(e) {
+  const receivedAt = new Date();
+  const timestampText = Utilities.formatDate(
+    receivedAt,
+    TIME_ZONE,
+    "yyyy/MM/dd HH:mm"
+  );
+  const payload = (e && e.parameter) || {};
+  const values = [
+    receivedAt,
+    String(payload.company || ""),
+    String(payload.name || ""),
+    String(payload.phone || ""),
+    String(payload.email || ""),
+    String(payload.type || ""),
+    String(payload.content || ""),
+  ];
+
+  const lock = LockService.getScriptLock();
+  lock.waitLock(10000);
+
+  try {
+    const spreadsheet = SpreadsheetApp.openById(SPREADSHEET_ID);
+    const sheet = spreadsheet.getSheetByName(SHEET_NAME) || spreadsheet.insertSheet(SHEET_NAME);
+
+    if (sheet.getRange(2, 1).isBlank()) {
+      sheet.getRange(2, 1, 1, HEADERS.length).setValues([HEADERS]);
+    }
+
+    const row = Math.max(sheet.getLastRow() + 1, 3);
+    sheet.getRange(row, 1, 1, values.length).setValues([values]);
+    sheet.getRange(row, 1).setNumberFormat("yyyy/MM/dd HH:mm");
+
+    return ContentService
+      .createTextOutput(JSON.stringify({ ok: true, timestamp: timestampText }))
+      .setMimeType(ContentService.MimeType.JSON);
+  } finally {
+    lock.releaseLock();
+  }
+}
