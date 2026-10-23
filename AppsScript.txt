@@ -41,6 +41,7 @@ function doPost(e) {
       : [];
     const emptyIndex = timestamps.findIndex(([value]) => value === "" || value === null);
     const row = emptyIndex === -1 ? Math.max(lastRow + 1, 3) : emptyIndex + 3;
+    sheet.getRange(row, 4).setNumberFormat("@");
     sheet.getRange(row, 1, 1, values.length).setValues([values]);
     sheet.getRange(row, 1).setNumberFormat("yyyy/MM/dd HH:mm");
 

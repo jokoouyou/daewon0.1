@@ -33,7 +33,7 @@ export default function ContactClient() {
 
     try {
       await fetch(
-        "https://script.google.com/macros/s/AKfycbzMxJ6sCo_Hko9t2rIciQNNH3_T9QLTGb0TbaNLxueBzSuqwyn2i9UhGHbSoUa0wEg/exec",
+        "https://script.google.com/macros/s/AKfycbzoNo5zOw0HTgkImU4b4iuWRm7hbOltb7gxh2qNZ66xpqXTrd05SZGOaCORVogJnAM/exec",
         { method: "POST", body: payload, mode: "no-cors" }
       );
       setSubmitted(true);
