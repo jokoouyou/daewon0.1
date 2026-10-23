@@ -1,6 +1,6 @@
 const SPREADSHEET_ID = "16KDnPYhTRJxTwrztyexnNKrWsyVENW5xWeqnQBkSFJM";
 const SHEET_NAME = "문의";
-const NOTIFICATION_EMAIL = "mailtoreve@gmail.com";
+const NOTIFICATION_EMAIL = "dwfe119@hanmail.net";
 const TIME_ZONE = "Asia/Seoul";
 const HEADERS = ["timestamp", "company", "name", "phone", "email", "type", "content"];
 
