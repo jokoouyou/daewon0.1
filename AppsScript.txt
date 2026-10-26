@@ -1,16 +1,86 @@
+// 문의 데이터를 저장할 Google 스프레드시트와 시트 탭 이름입니다.
 const SPREADSHEET_ID = "16KDnPYhTRJxTwrztyexnNKrWsyVENW5xWeqnQBkSFJM";
 const SHEET_NAME = "문의";
+
+// 새 문의가 접수될 때 문의 내용을 전달받을 주소입니다.
 const NOTIFICATION_EMAIL = "dwfe119@hanmail.net";
+
+// 스프레드시트가 곧 용량 한도에 도달할 때 알림을 보낼 주소입니다.
+const CAPACITY_WARNING_EMAILS = ["dwfe119@hanmail.net", "mailtoreve@gmail.com"];
+const CAPACITY_WARNING_SUBJECT = "대원소방 고객 문의 기록 구글 시트가 만재되었습니다!";
+const CAPACITY_WARNING_BODY = "현재 사용 중인 <대원소방 고객 문의 기록> (https://docs.google.com/spreadsheets/d/16KDnPYhTRJxTwrztyexnNKrWsyVENW5xWeqnQBkSFJM/edit?usp=sharing) 의 장부가 만재되어 곧 더 이상 기재할 수 없습니다. 기존의 문의 기록을 아카이빙하고, 새 구글 시트 문서를 생성해주세요.";
+
+// Google 스프레드시트 한 문서에 허용되는 전체 셀 수와 알림 기준입니다.
+// 이 코드는 현재 시트의 열 개수를 기준으로 남은 행 수를 대략 계산합니다.
+const MAX_SPREADSHEET_CELLS = 10000000;
+const CAPACITY_WARNING_ROWS = 500;
+
+// 날짜 표시 및 문의 표의 데이터 열 이름입니다.
 const TIME_ZONE = "Asia/Seoul";
 const HEADERS = ["timestamp", "company", "name", "phone", "email", "type", "content"];
 
+/**
+ * 다음 문의를 기록할 때 스프레드시트의 남은 입력 가능 행을 계산합니다.
+ * 남은 행이 설정된 기준 이하이면 용량 임박 안내 메일을 한 번 발송합니다.
+ *
+ * @param {GoogleAppsScript.Spreadsheet.Spreadsheet} spreadsheet 저장 대상 문서
+ * @param {GoogleAppsScript.Spreadsheet.Sheet} sheet 문의를 기록할 시트 탭
+ * @param {number} currentRow 이번 문의를 기록할 행 번호
+ */
+function notifyWhenNearCapacity(spreadsheet, sheet, currentRow) {
+  // 스크립트 속성에 알림 발송 여부를 저장해 웹앱이 다시 실행되어도 중복 발송을 막습니다.
+  const properties = PropertiesService.getScriptProperties();
+  const notifiedKey = `capacity_warning_sent_${SPREADSHEET_ID}`;
+  if (properties.getProperty(notifiedKey)) return;
+
+  // 문서 내 모든 탭이 현재 차지하고 있는 셀 수를 합산합니다.
+  // 각 탭의 최대 행 수와 최대 열 수를 곱해 할당된 셀 수를 계산합니다.
+  const allocatedCells = spreadsheet.getSheets().reduce(
+    (total, currentSheet) => total + currentSheet.getMaxRows() * currentSheet.getMaxColumns(),
+    0
+  );
+
+  // 남은 셀을 문의 탭의 열 개수로 나누어, 문의 탭에 더 추가할 수 있는 행 수를 구합니다.
+  const additionalRows = Math.floor(
+    (MAX_SPREADSHEET_CELLS - allocatedCells) / sheet.getMaxColumns()
+  );
+
+  // 현재 탭에 이미 만들어져 있는 행 중 이번 문의 행 이후의 행과,
+  // 전체 셀 한도 내에서 추가로 확보할 수 있는 행을 합산합니다.
+  const remainingRows = sheet.getMaxRows() - currentRow + 1 + additionalRows;
+
+  // 아직 기준보다 여유가 있으면 알림 없이 종료합니다.
+  if (remainingRows > CAPACITY_WARNING_ROWS) return;
+
+  // 두 수신자에게 용량 임박 안내를 보냅니다.
+  MailApp.sendEmail({
+    to: CAPACITY_WARNING_EMAILS.join(","),
+    subject: CAPACITY_WARNING_SUBJECT,
+    body: CAPACITY_WARNING_BODY,
+  });
+
+  // 메일 발송에 성공한 경우에만 발송 시각을 저장합니다.
+  // 따라서 발송 오류가 나면 다음 문의 접수 때 다시 시도합니다.
+  properties.setProperty(notifiedKey, new Date().toISOString());
+}
+
+/**
+ * 웹 앱의 POST 요청을 받아 문의를 시트에 저장하고 담당자에게 이메일을 보냅니다.
+ * 웹사이트의 문의 폼이 이 함수를 호출합니다.
+ *
+ * @param {GoogleAppsScript.Events.DoPost} e 웹 앱이 전달하는 요청 이벤트
+ * @return {GoogleAppsScript.Content.TextOutput} JSON 형식의 처리 결과
+ */
 function doPost(e) {
+  // 요청 접수 시각을 보관하고, 이메일 본문 등에 표시할 시간 문자열도 만듭니다.
   const receivedAt = new Date();
   const timestampText = Utilities.formatDate(
     receivedAt,
     TIME_ZONE,
     "yyyy/MM/dd HH:mm"
   );
+
+  // 폼에서 전달된 각 항목을 읽습니다. 값이 없거나 요청 정보가 없으면 빈 문자열로 저장합니다.
   const payload = (e && e.parameter) || {};
   const values = [
     receivedAt,
@@ -22,32 +92,55 @@ function doPost(e) {
     String(payload.content || ""),
   ];
 
+  // 여러 요청이 동시에 들어와 같은 행을 선택하지 않도록 잠금을 겁니다.
   const lock = LockService.getScriptLock();
   lock.waitLock(10000);
 
   try {
+    // ID로 스프레드시트를 열고 시간대를 한국 시간으로 설정합니다.
     const spreadsheet = SpreadsheetApp.openById(SPREADSHEET_ID);
     spreadsheet.setSpreadsheetTimeZone(TIME_ZONE);
+
+    // 문의 탭을 찾습니다. 없으면 새 탭을 만듭니다.
     const sheet = spreadsheet.getSheetByName(SHEET_NAME) || spreadsheet.insertSheet(SHEET_NAME);
 
+    // 2행이 비어 있으면 문의 항목의 헤더를 기록합니다. 1행은 기존 문서의 제목 등에 쓸 수 있습니다.
     if (sheet.getRange(2, 1).isBlank()) {
       sheet.getRange(2, 1, 1, HEADERS.length).setValues([HEADERS]);
     }
+
+    // 2행의 H/I열에 문의 알림 이메일 발송 결과와 오류 내용을 기록할 헤더를 설정합니다.
     sheet.getRange(2, 8, 1, 2).setValues([["email_status", "email_error"]]);
 
+    // 3행부터 타임스탬프를 확인해 첫 빈 문의 행을 찾습니다.
+    // 빈 행이 없으면 마지막 사용 행 다음에 기록합니다.
     const lastRow = sheet.getLastRow();
     const timestamps = lastRow >= 3
       ? sheet.getRange(3, 1, lastRow - 2, 1).getValues()
       : [];
     const emptyIndex = timestamps.findIndex(([value]) => value === "" || value === null);
     const row = emptyIndex === -1 ? Math.max(lastRow + 1, 3) : emptyIndex + 3;
+
+    // 행을 기록하기 전에 시트 용량이 임박했는지 점검합니다.
+    // 점검/알림에 실패하더라도 문의 저장과 기본 알림 이메일은 계속 진행합니다.
+    try {
+      notifyWhenNearCapacity(spreadsheet, sheet, row);
+    } catch (error) {
+      console.error(`Capacity warning failed: ${error && error.message ? error.message : error}`);
+    }
+
+    // 전화번호 열은 텍스트 형식으로 지정해 앞자리 0 등이 숫자 처리로 사라지지 않게 합니다.
     sheet.getRange(row, 4).setNumberFormat("@");
+
+    // 문의의 7개 항목을 A~G열에 기록하고 접수 시각을 지정된 형식으로 표시합니다.
     sheet.getRange(row, 1, 1, values.length).setValues([values]);
     sheet.getRange(row, 1).setNumberFormat("yyyy/MM/dd HH:mm");
 
+    // 기본 상태는 발송 성공으로 두고, 메일 발송에 실패하면 오류 정보로 바꿉니다.
     let emailStatus = "sent";
     let emailError = "";
     try {
+      // 접수한 문의를 담당자에게 이메일로 전달합니다.
       MailApp.sendEmail({
         to: NOTIFICATION_EMAIL,
         subject: `[대원소방 문의] ${values[2] || "이름 미입력"}`,
@@ -62,21 +155,26 @@ function doPost(e) {
         ].join("\n\n"),
       });
     } catch (error) {
+      // 메일이 실패해도 문의 행은 보존하고, 실패 상태와 원인을 시트에 남깁니다.
       emailStatus = "failed";
       emailError = error && error.message ? error.message : String(error);
       console.error(`MailApp.sendEmail failed: ${emailError}`);
     }
+
+    // H/I열에 이메일 전송 상태와 오류 메시지를 기록합니다.
     sheet.getRange(row, 8, 1, 2).setValues([[emailStatus, emailError]]);
 
+    // 호출한 웹사이트에 JSON 형식으로 처리 결과를 돌려줍니다.
     return ContentService
       .createTextOutput(JSON.stringify({ ok: true, emailSent: emailStatus === "sent", timestamp: timestampText }))
       .setMimeType(ContentService.MimeType.JSON);
   } finally {
+    // 성공/오류와 관계없이 잠금을 풀어 다음 요청이 처리될 수 있게 합니다.
     lock.releaseLock();
   }
 }
 
-// Run once from the Apps Script editor to authorize MailApp and inspect quota.
+// Apps Script 편집기에서 한 번 직접 실행하여 MailApp 권한을 승인하고 남은 일일 발송 한도를 확인합니다.
 function authorizeMailApp() {
   const remainingQuota = MailApp.getRemainingDailyQuota();
   console.log(`Remaining email quota: ${remainingQuota}`);
