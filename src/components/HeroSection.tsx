@@ -2,7 +2,6 @@
 
 import { useState, useEffect, useCallback } from "react";
 import Link from "next/link";
-import { ChevronLeft, ChevronRight } from "lucide-react";
 
 const heroImages = [
   "/assets/images/dw-title12.jpg",
@@ -18,10 +17,6 @@ export default function HeroSection() {
 
   const next = useCallback(() => {
     setCurrent((prev) => (prev + 1) % heroImages.length);
-  }, []);
-
-  const prev = useCallback(() => {
-    setCurrent((prev) => (prev - 1 + heroImages.length) % heroImages.length);
   }, []);
 
   useEffect(() => {
@@ -53,22 +48,6 @@ export default function HeroSection() {
       {/* Overlay */}
       <div className="absolute inset-0 bg-gradient-to-r from-navy/95 via-navy/80 to-navy/60" />
       <div className="absolute inset-0 bg-gradient-to-t from-navy-dark/60 via-transparent to-transparent" />
-
-      {/* Carousel Controls */}
-      <button
-        onClick={prev}
-        className="absolute left-4 top-1/2 -translate-y-1/2 z-10 p-2 md:p-3 bg-black/30 hover:bg-black/50 text-white rounded-full transition-all backdrop-blur-sm"
-        aria-label="이전 이미지"
-      >
-        <ChevronLeft className="h-5 w-5 md:h-6 md:w-6" />
-      </button>
-      <button
-        onClick={next}
-        className="absolute right-4 top-1/2 -translate-y-1/2 z-10 p-2 md:p-3 bg-black/30 hover:bg-black/50 text-white rounded-full transition-all backdrop-blur-sm"
-        aria-label="다음 이미지"
-      >
-        <ChevronRight className="h-5 w-5 md:h-6 md:w-6" />
-      </button>
 
       {/* Dots */}
       <div className="absolute bottom-8 left-1/2 -translate-x-1/2 z-10 flex gap-2">
