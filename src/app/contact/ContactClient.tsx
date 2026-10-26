@@ -145,7 +145,7 @@ export default function ContactClient() {
               </div>
 
               <a
-                href="https://pf.kakao.com/daewonfire/friend"
+                href="https://open.kakao.com/o/pUCXMdUi"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center gap-2 bg-amber-accent text-navy font-bold px-6 py-3 md:px-8 md:py-4 rounded-lg hover:bg-amber-accent/90 transition-all text-sm md:text-base"
