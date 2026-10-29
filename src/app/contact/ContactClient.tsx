@@ -123,10 +123,10 @@ export default function ContactClient() {
                   <div>
                     <h3 className="font-bold text-navy mb-1">이메일</h3>
                     <a
-                      href="mailto:dwfe119@hanmail.net"
+                      href="mailto:dwfe1199@naver.com"
                       className="text-safety-red font-semibold hover:underline"
                     >
-                      dwfe119@hanmail.net
+                      dwfe1199@naver.com
                     </a>
                   </div>
                 </div>

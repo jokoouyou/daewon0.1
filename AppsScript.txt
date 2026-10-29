@@ -3,10 +3,10 @@ const SPREADSHEET_ID = "16KDnPYhTRJxTwrztyexnNKrWsyVENW5xWeqnQBkSFJM";
 const SHEET_NAME = "문의";
 
 // 새 문의가 접수될 때 문의 내용을 전달받을 주소입니다.
-const NOTIFICATION_EMAIL = "dwfe119@hanmail.net";
+const NOTIFICATION_EMAIL = "dwfe1199@naver.com";
 
 // 스프레드시트가 곧 용량 한도에 도달할 때 알림을 보낼 주소입니다.
-const CAPACITY_WARNING_EMAILS = ["dwfe119@hanmail.net", "mailtoreve@gmail.com"];
+const CAPACITY_WARNING_EMAILS = ["dwfe1199@naver.com", "mailtoreve@gmail.com"];
 const CAPACITY_WARNING_SUBJECT = "대원소방 고객 문의 기록 구글 시트가 만재되었습니다!";
 const CAPACITY_WARNING_BODY = "현재 사용 중인 <대원소방 고객 문의 기록> (https://docs.google.com/spreadsheets/d/16KDnPYhTRJxTwrztyexnNKrWsyVENW5xWeqnQBkSFJM/edit?usp=sharing) 의 장부가 만재되어 곧 더 이상 기재할 수 없습니다. 기존의 문의 기록을 아카이빙하고, 새 구글 시트 문서를 생성해주세요.";
 

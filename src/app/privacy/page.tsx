@@ -63,7 +63,7 @@ export default function PrivacyPage() {
           </p>
           <p>
             전화: (051) 266-5106<br />
-            이메일: dwfe119@hanmail.net
+            이메일: dwfe1199@naver.com
           </p>
         </div>
       </div>

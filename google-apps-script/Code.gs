@@ -1,6 +1,6 @@
 const SPREADSHEET_ID = "16KDnPYhTRJxTwrztyexnNKrWsyVENW5xWeqnQBkSFJM";
 const SHEET_NAME = "문의";
-const NOTIFICATION_EMAIL = "dwfe119@hanmail.net";
+const NOTIFICATION_EMAIL = "dwfe1199@naver.com";
 const TIME_ZONE = "Asia/Seoul";
 
 /**
