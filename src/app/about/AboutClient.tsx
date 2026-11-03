@@ -77,7 +77,7 @@ export default function AboutClient() {
       <section id="overview" className="relative overflow-hidden py-16 md:py-24 bg-white">
         <div
           aria-hidden="true"
-          className="pointer-events-none absolute inset-0 opacity-25"
+          className="pointer-events-none absolute inset-0 opacity-[0.18]"
           style={{
             backgroundImage: "url('/assets/images/Logo-Daewon.svg')",
             backgroundPosition: "center",
@@ -96,7 +96,7 @@ export default function AboutClient() {
                 <span className="text-safety-red">대원소방</span>
               </h2>
               <p className="text-slate-500 text-base md:text-lg leading-relaxed mb-4">
-                (소방설비공사 면허업체)
+                <b>소방설비공사 면허업체</b>
               </p>
               <div className="space-y-4 text-slate-600 leading-relaxed">
                 <p>
