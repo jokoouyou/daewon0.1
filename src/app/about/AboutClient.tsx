@@ -74,8 +74,18 @@ export default function AboutClient() {
       </section>
 
       {/* Overview Section */}
-      <section id="overview" className="py-16 md:py-24 bg-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <section id="overview" className="relative overflow-hidden py-16 md:py-24 bg-white">
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute inset-0 opacity-40"
+          style={{
+            backgroundImage: "url('/assets/images/Logo-Daewon.svg')",
+            backgroundPosition: "center",
+            backgroundRepeat: "no-repeat",
+            backgroundSize: "min(70vw, 620px)",
+          }}
+        />
+        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-5 gap-12 lg:gap-16">
             <div className="lg:col-span-3">
               <span className="inline-block text-safety-red font-bold text-xs uppercase tracking-[0.2em] mb-3">
