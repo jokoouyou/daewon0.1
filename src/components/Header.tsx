@@ -44,7 +44,7 @@ export default function Header() {
           <Link href="/" className="flex items-center gap-3 group">
             <div className="relative w-10 h-10 md:w-12 md:h-12 overflow-hidden rounded-lg">
               <Image
-                src="/assets/images/111.jpg"
+                src="/assets/images/Logo-Daewon.svg"
                 alt="대원소방 로고"
                 fill
                 sizes="48px"
