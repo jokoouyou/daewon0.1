@@ -77,7 +77,7 @@ export default function AboutClient() {
       <section id="overview" className="relative overflow-hidden py-16 md:py-24 bg-white">
         <div
           aria-hidden="true"
-          className="pointer-events-none absolute inset-0 opacity-40"
+          className="pointer-events-none absolute inset-0 opacity-25"
           style={{
             backgroundImage: "url('/assets/images/Logo-Daewon.svg')",
             backgroundPosition: "center",
