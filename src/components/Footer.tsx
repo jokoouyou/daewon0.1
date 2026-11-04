@@ -1,5 +1,6 @@
 import Link from "next/link";
-import { Phone, Mail, MapPin } from "lucide-react";
+import Image from "next/image";
+import { Phone, Mail, MapPin, MessageCircle } from "lucide-react";
 
 export default function Footer() {
   return (
@@ -10,8 +11,14 @@ export default function Footer() {
           {/* Company Info */}
           <div className="space-y-4">
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 bg-safety-red rounded-lg flex items-center justify-center font-black text-white text-lg">
-                DW
+              <div className="relative w-10 h-10 overflow-hidden rounded-lg">
+                <Image
+                  src="/assets/images/Logo-Daewon.svg"
+                  alt="대원소방 로고"
+                  fill
+                  sizes="40px"
+                  className="object-cover"
+                />
               </div>
               <div className="flex flex-col">
                 <span className="text-white font-bold text-sm leading-tight">
@@ -105,6 +112,17 @@ export default function Footer() {
                 <Phone className="h-4 w-4 text-safety-red flex-shrink-0 mt-0.5" />
                 <a href="tel:0512665106" className="hover:text-white transition-colors">
                   (051) 266-5106
+                </a>
+              </li>
+              <li className="flex items-start gap-2 text-sm">
+                <MessageCircle className="h-4 w-4 text-safety-red flex-shrink-0 mt-0.5" />
+                <a
+                  href="https://open.kakao.com/o/pUCXMdUi"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="hover:text-white transition-colors"
+                >
+                  카카오톡
                 </a>
               </li>
             </ul>
