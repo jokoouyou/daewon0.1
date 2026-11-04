@@ -7,10 +7,10 @@ import Image from "next/image";
 import { usePathname } from "next/navigation";
 
 const navLinks = [
-  { label: "회사 소개", href: "/about" },
-  { label: "사업 분야", href: "/services" },
-  { label: "주요 실적", href: "/achievements" },
-  { label: "문의하기", href: "/contact" },
+  { label: "?�사 ?�개", href: "/about" },
+  { label: "?�업 분야", href: "/services" },
+  { label: "주요 ?�적", href: "/achievements" },
+  { label: "문의?�기", href: "/contact" },
 ];
 
 export default function Header() {
@@ -45,7 +45,7 @@ export default function Header() {
             <div className="relative w-10 h-10 md:w-12 md:h-12 overflow-hidden rounded-lg">
               <Image
                 src="/assets/images/Logo-Daewon.svg"
-                alt="대원소방 로고"
+                alt="?�?�소�?로고"
                 fill
                 sizes="48px"
                 className="object-cover"
@@ -53,7 +53,7 @@ export default function Header() {
             </div>
             <div className="flex flex-col">
               <span className="text-white font-bold text-sm md:text-base leading-tight">
-                대원소방
+                ?�?�소�?
               </span>
               <span className="text-white/50 text-[10px] md:text-xs tracking-wider leading-tight">
                 DAEWON FIRE PROTECTION
@@ -84,11 +84,11 @@ export default function Header() {
           {/* Desktop CTA */}
           <div className="hidden lg:flex items-center gap-3">
             <a
-              href="tel:0512665106"
+              href="tel:0552665106"
               className="hidden xl:flex items-center gap-2 text-slate-300 hover:text-white text-sm transition-colors"
             >
               <Phone className="h-4 w-4" />
-              <span>(051) 266-5106</span>
+              <span>(055) 266-5106</span>
             </a>
             <Link href="/contact" className="btn-primary hidden xl:inline-flex">
               무료 견적 문의
@@ -99,7 +99,7 @@ export default function Header() {
           <button
             onClick={() => setMobileOpen(!mobileOpen)}
             className="lg:hidden p-2 text-white hover:bg-white/10 rounded-lg transition-colors"
-            aria-label="메뉴 열기"
+            aria-label="메뉴 ?�기"
           >
             {mobileOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
           </button>
@@ -126,11 +126,11 @@ export default function Header() {
               ))}
               <div className="mt-4 pt-4 border-t border-white/10">
                 <a
-                  href="tel:0512665106"
+                  href="tel:0552665106"
                   className="flex items-center gap-3 px-4 py-3 text-slate-300 hover:text-white text-sm"
                 >
                   <Phone className="h-4 w-4 text-safety-red" />
-                  <span>(051) 266-5106</span>
+                  <span>(055) 266-5106</span>
                 </a>
                 <Link href="/contact" className="btn-primary w-full mt-3">
                   무료 견적 문의

@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Phone, Mail, MapPin, MessageCircle, Send, Check } from "lucide-react";
+import { Phone, Mail, MapPin, MessageCircle, Printer, Send, Check } from "lucide-react";
 
 export default function ContactClient() {
   const [formData, setFormData] = useState({
@@ -108,11 +108,21 @@ export default function ContactClient() {
                   <div>
                     <h3 className="font-bold text-navy mb-1">전화</h3>
                     <a
-                      href="tel:0512665106"
+                      href="tel:0552665106"
                       className="text-safety-red font-semibold hover:underline"
                     >
-                      (051) 266-5106
+                      (055) 266-5106
                     </a>
+                  </div>
+                </div>
+
+                <div className="flex items-start gap-4">
+                  <div className="w-12 h-12 bg-safety-red/10 rounded-xl flex items-center justify-center flex-shrink-0">
+                    <Printer className="h-6 w-6 text-safety-red" />
+                  </div>
+                  <div>
+                    <h3 className="font-bold text-navy mb-1">팩스</h3>
+                    <p className="text-slate-500 text-sm">(055) 298-1193</p>
                   </div>
                 </div>
 

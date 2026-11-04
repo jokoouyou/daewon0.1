@@ -21,11 +21,11 @@ export default function EmergencyCallout() {
           </div>
           <div className="flex flex-col sm:flex-row items-center gap-3 md:gap-4 flex-shrink-0">
             <a
-              href="tel:0512665106"
+              href="tel:0552665106"
               className="inline-flex items-center gap-2 bg-white text-safety-red font-bold px-6 py-3 md:px-8 md:py-4 rounded-lg hover:bg-white/90 transition-all text-sm md:text-base shadow-lg"
             >
               <Phone className="h-5 w-5" />
-              (051) 266-5106
+              (055) 266-5106
             </a>
             <Link
               href="/contact"

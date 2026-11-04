@@ -62,7 +62,7 @@ export default function PrivacyPage() {
             개인정보와 관련된 문의사항이 있으시면 아래로 연락해 주시기 바랍니다.
           </p>
           <p>
-            전화: (051) 266-5106<br />
+            전화: (055) 266-5106<br />
             이메일: dwfe1199@naver.com
           </p>
         </div>

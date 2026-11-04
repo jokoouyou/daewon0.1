@@ -16,10 +16,10 @@ export default function EmergencyBanner() {
             <Phone className="h-4 w-4 animate-pulse flex-shrink-0" />
             <span className="font-bold hidden sm:inline">24시간 긴급 출동:</span>
             <a
-              href="tel:0512665106"
+              href="tel:0552665106"
               className="font-bold hover:text-white/80 transition-colors"
             >
-              (051) 266-5106
+              (055) 266-5106
             </a>
             <span className="hidden md:inline text-white/70">|</span>
             <span className="hidden md:inline text-white/70">
